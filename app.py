@@ -118,8 +118,8 @@ def get_component_result(ashtakoot_result, component_name):
 
 MIN_BIRTH_DATE = date(1975, 1, 1)
 MAX_BIRTH_DATE = date(2020, 12, 31)
-DEFAULT_BIRTH_DATE = date(1985, 12, 25)
-DEFAULT_BIRTH_TIME = time(22, 10, 0)
+DEFAULT_BIRTH_DATE = date(1997, 9, 24)
+DEFAULT_BIRTH_TIME = time(0, 58, 0)
 ONE_MINUTE = 60
 
 PLACES = {
