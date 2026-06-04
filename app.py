@@ -4,6 +4,7 @@ from engine.chart import calculate_moon_details
 from engine.ashtakoot import calculate_ashtakoot
 from engine.mangal_shukra import calculate_mangal_shukra_sambandha
 from engine.manglik import calculate_manglik_matching
+import requests
 
 def format_score(value):
     """
@@ -115,6 +116,33 @@ def get_component_result(ashtakoot_result, component_name):
             return item
 
     return None
+
+def send_report_to_formspree(report_payload):
+    """
+    Sends generated Kundali Milan report data to Formspree.
+    The endpoint must be stored in Streamlit Secrets.
+    """
+
+    endpoint = st.secrets.get("FORMSPREE_REPORT_ENDPOINT")
+
+    if not endpoint:
+        raise ValueError("FORMSPREE_REPORT_ENDPOINT is missing from Streamlit Secrets.")
+
+    response = requests.post(
+        endpoint,
+        json=report_payload,
+        timeout=10,
+        headers={
+            "Accept": "application/json",
+        },
+    )
+
+    if response.status_code not in [200, 201, 202]:
+        raise RuntimeError(
+            f"Formspree submission failed: {response.status_code} — {response.text}"
+        )
+
+    return True
 
 MIN_BIRTH_DATE = date(1975, 1, 1)
 MAX_BIRTH_DATE = date(2020, 12, 31)
@@ -300,9 +328,9 @@ with st.form("kundali_form"):
     # st.caption(f"Using coordinates: {p2_lat:.6f}, {p2_lon:.6f}")
 
     consent = st.checkbox(
-        "I consent to processing these birth details only for generating this report."
+        "I consent to processing these birth details for generating this report and "
+        "saving the submitted details and generated results for record/review by the app owner."
     )
-
     submitted = st.form_submit_button("Generate Kundali Milan Report")
 
 if submitted:
@@ -339,6 +367,71 @@ if submitted:
             mangal_shukra_result
         )
         nadi_result = get_component_result(ashtakoot_result, "Nadi")
+
+        report_payload = {
+            "report_type": "Kundali Milan Report",
+            "final_answer": final_tldr["title"],
+            "final_message": final_tldr["message"],
+            "failed_reasons": ", ".join(final_tldr["failed_reasons"]) if final_tldr["failed_reasons"] else "None",
+
+            "person1_name": p1_name or "Person 1",
+            "person1_date": str(p1_date),
+            "person1_time": str(p1_time),
+            "person1_place": p1_place,
+            "person1_lat": p1_lat,
+            "person1_lon": p1_lon,
+            "person1_moon_rashi": chart1["moon_rashi"]["rashi_name"],
+            "person1_moon_nakshatra": chart1["moon_nakshatra"]["nakshatra_name"],
+            "person1_moon_pada": chart1["moon_nakshatra"]["pada"],
+            "person1_mars_rashi": chart1["planets"]["Mars"]["rashi"]["rashi_name"],
+            "person1_mars_navamsa": chart1["planets"]["Mars"]["navamsa"]["rashi_name"],
+            "person1_venus_rashi": chart1["planets"]["Venus"]["rashi"]["rashi_name"],
+            "person1_venus_navamsa": chart1["planets"]["Venus"]["navamsa"]["rashi_name"],
+
+            "person2_name": p2_name or "Person 2",
+            "person2_date": str(p2_date),
+            "person2_time": str(p2_time),
+            "person2_place": p2_place,
+            "person2_lat": p2_lat,
+            "person2_lon": p2_lon,
+            "person2_moon_rashi": chart2["moon_rashi"]["rashi_name"],
+            "person2_moon_nakshatra": chart2["moon_nakshatra"]["nakshatra_name"],
+            "person2_moon_pada": chart2["moon_nakshatra"]["pada"],
+            "person2_mars_rashi": chart2["planets"]["Mars"]["rashi"]["rashi_name"],
+            "person2_mars_navamsa": chart2["planets"]["Mars"]["navamsa"]["rashi_name"],
+            "person2_venus_rashi": chart2["planets"]["Venus"]["rashi"]["rashi_name"],
+            "person2_venus_navamsa": chart2["planets"]["Venus"]["navamsa"]["rashi_name"],
+
+            "ashtakoot_score": f"{format_score(ashtakoot_result['total_score'])} / {ashtakoot_result['max_score']}",
+            "nadi_score": f"{format_score(nadi_result['score'])} / {nadi_result['max_score']}" if nadi_result else "Not calculated",
+            "nadi_details": nadi_result["details"] if nadi_result else "Not calculated",
+
+            "manglik_verdict": manglik_result["verdict"],
+            "manglik_summary": manglik_result["summary"],
+            "person1_manglik_status": manglik_result["person1"]["status"],
+            "person1_mars_house_from_lagna": manglik_result["person1"]["mars_house_from_lagna"],
+            "person2_manglik_status": manglik_result["person2"]["status"],
+            "person2_mars_house_from_lagna": manglik_result["person2"]["mars_house_from_lagna"],
+
+            "mangal_shukra_strength": mangal_shukra_result["strength"],
+            "mangal_shukra_summary": mangal_shukra_result["summary"],
+            "mangal_shukra_interpretation": mangal_shukra_result["interpretation"],
+        }
+
+        submission_key = (
+            f"{report_payload['person1_name']}_{report_payload['person1_date']}_{report_payload['person1_time']}_"
+            f"{report_payload['person2_name']}_{report_payload['person2_date']}_{report_payload['person2_time']}"
+        )
+
+        if st.session_state.get("last_formspree_submission_key") != submission_key:
+            try:
+                send_report_to_formspree(report_payload)
+                st.session_state["last_formspree_submission_key"] = submission_key
+            except Exception as formspree_error:
+                st.warning(
+                    "The report was generated successfully, but the internal report submission could not be saved."
+                )
+                st.caption(str(formspree_error))
 
         st.divider()
         st.header("Kundali Milan Summary")
