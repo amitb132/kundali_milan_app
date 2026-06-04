@@ -271,7 +271,7 @@ with st.form("kundali_form"):
     p1_lat = PLACES[p1_place]["lat"]
     p1_lon = PLACES[p1_place]["lon"]
 
-    st.caption(f"Using coordinates: {p1_lat:.6f}, {p1_lon:.6f}")
+    # st.caption(f"Using coordinates: {p1_lat:.6f}, {p1_lon:.6f}")
 
     st.header("Bride Details")
 
@@ -297,7 +297,7 @@ with st.form("kundali_form"):
     p2_lat = PLACES[p2_place]["lat"]
     p2_lon = PLACES[p2_place]["lon"]
 
-    st.caption(f"Using coordinates: {p2_lat:.6f}, {p2_lon:.6f}")
+    # st.caption(f"Using coordinates: {p2_lat:.6f}, {p2_lon:.6f}")
 
     consent = st.checkbox(
         "I consent to processing these birth details only for generating this report."
