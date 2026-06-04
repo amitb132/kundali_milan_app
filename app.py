@@ -374,33 +374,33 @@ if submitted:
             "final_message": final_tldr["message"],
             "failed_reasons": ", ".join(final_tldr["failed_reasons"]) if final_tldr["failed_reasons"] else "None",
 
-            "person1_name": p1_name or "Person 1",
-            "person1_date": str(p1_date),
-            "person1_time": str(p1_time),
-            "person1_place": p1_place,
-            "person1_lat": p1_lat,
-            "person1_lon": p1_lon,
-            "person1_moon_rashi": chart1["moon_rashi"]["rashi_name"],
-            "person1_moon_nakshatra": chart1["moon_nakshatra"]["nakshatra_name"],
-            "person1_moon_pada": chart1["moon_nakshatra"]["pada"],
-            "person1_mars_rashi": chart1["planets"]["Mars"]["rashi"]["rashi_name"],
-            "person1_mars_navamsa": chart1["planets"]["Mars"]["navamsa"]["rashi_name"],
-            "person1_venus_rashi": chart1["planets"]["Venus"]["rashi"]["rashi_name"],
-            "person1_venus_navamsa": chart1["planets"]["Venus"]["navamsa"]["rashi_name"],
+            "Groom_name": p1_name or "Person 1",
+            "Groom_date": str(p1_date),
+            "Groom_time": str(p1_time),
+            "Groom_place": p1_place,
+            "Groom_lat": p1_lat,
+            "Groom_lon": p1_lon,
+            "Groom_moon_rashi": chart1["moon_rashi"]["rashi_name"],
+            "Groom_moon_nakshatra": chart1["moon_nakshatra"]["nakshatra_name"],
+            "Groom_moon_pada": chart1["moon_nakshatra"]["pada"],
+            "Groom_mars_rashi": chart1["planets"]["Mars"]["rashi"]["rashi_name"],
+            "Groom_mars_navamsa": chart1["planets"]["Mars"]["navamsa"]["rashi_name"],
+            "Groom_venus_rashi": chart1["planets"]["Venus"]["rashi"]["rashi_name"],
+            "Groom_venus_navamsa": chart1["planets"]["Venus"]["navamsa"]["rashi_name"],
 
-            "person2_name": p2_name or "Person 2",
-            "person2_date": str(p2_date),
-            "person2_time": str(p2_time),
-            "person2_place": p2_place,
-            "person2_lat": p2_lat,
-            "person2_lon": p2_lon,
-            "person2_moon_rashi": chart2["moon_rashi"]["rashi_name"],
-            "person2_moon_nakshatra": chart2["moon_nakshatra"]["nakshatra_name"],
-            "person2_moon_pada": chart2["moon_nakshatra"]["pada"],
-            "person2_mars_rashi": chart2["planets"]["Mars"]["rashi"]["rashi_name"],
-            "person2_mars_navamsa": chart2["planets"]["Mars"]["navamsa"]["rashi_name"],
-            "person2_venus_rashi": chart2["planets"]["Venus"]["rashi"]["rashi_name"],
-            "person2_venus_navamsa": chart2["planets"]["Venus"]["navamsa"]["rashi_name"],
+            "Bride_name": p2_name or "Person 2",
+            "Bride_date": str(p2_date),
+            "Bride_time": str(p2_time),
+            "Bride_place": p2_place,
+            "Bride_lat": p2_lat,
+            "Bride_lon": p2_lon,
+            "Bride_moon_rashi": chart2["moon_rashi"]["rashi_name"],
+            "Bride_moon_nakshatra": chart2["moon_nakshatra"]["nakshatra_name"],
+            "Bride_moon_pada": chart2["moon_nakshatra"]["pada"],
+            "Bride_mars_rashi": chart2["planets"]["Mars"]["rashi"]["rashi_name"],
+            "Bride_mars_navamsa": chart2["planets"]["Mars"]["navamsa"]["rashi_name"],
+            "Bride_venus_rashi": chart2["planets"]["Venus"]["rashi"]["rashi_name"],
+            "Bride_venus_navamsa": chart2["planets"]["Venus"]["navamsa"]["rashi_name"],
 
             "ashtakoot_score": f"{format_score(ashtakoot_result['total_score'])} / {ashtakoot_result['max_score']}",
             "nadi_score": f"{format_score(nadi_result['score'])} / {nadi_result['max_score']}" if nadi_result else "Not calculated",
@@ -408,10 +408,10 @@ if submitted:
 
             "manglik_verdict": manglik_result["verdict"],
             "manglik_summary": manglik_result["summary"],
-            "person1_manglik_status": manglik_result["person1"]["status"],
-            "person1_mars_house_from_lagna": manglik_result["person1"]["mars_house_from_lagna"],
-            "person2_manglik_status": manglik_result["person2"]["status"],
-            "person2_mars_house_from_lagna": manglik_result["person2"]["mars_house_from_lagna"],
+            "Groom_manglik_status": manglik_result["person1"]["status"],
+            "Groom_mars_house_from_lagna": manglik_result["person1"]["mars_house_from_lagna"],
+            "Bride_manglik_status": manglik_result["person2"]["status"],
+            "Bride_mars_house_from_lagna": manglik_result["person2"]["mars_house_from_lagna"],
 
             "mangal_shukra_strength": mangal_shukra_result["strength"],
             "mangal_shukra_summary": mangal_shukra_result["summary"],
@@ -419,8 +419,8 @@ if submitted:
         }
 
         submission_key = (
-            f"{report_payload['person1_name']}_{report_payload['person1_date']}_{report_payload['person1_time']}_"
-            f"{report_payload['person2_name']}_{report_payload['person2_date']}_{report_payload['person2_time']}"
+            f"{report_payload['Groom_name']}_{report_payload['Groom_date']}_{report_payload['Groom_time']}_"
+            f"{report_payload['Bride_name']}_{report_payload['Bride_date']}_{report_payload['Bride_time']}"
         )
 
         if st.session_state.get("last_formspree_submission_key") != submission_key:
@@ -607,10 +607,10 @@ if submitted:
                         {
                             "Matched Rashi": match["rashi_name"],
                             "Groom Placement": (
-                                f"{match['person1_planet']} {match['person1_varga']}"
+                                f"{match['Groom_planet']} {match['Groom_varga']}"
                             ),
                             "Bride Placement": (
-                                f"{match['person2_planet']} {match['person2_varga']}"
+                                f"{match['Bride_planet']} {match['Bride_varga']}"
                             ),
                         }
                     )
