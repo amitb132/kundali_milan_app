@@ -231,17 +231,13 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("Kundali Milan Report Generator")
+st.title("Kundali Milaan - Amit Bhardwaj's methods.")
 
 st.write(
     "Enter the birth details of both individuals. "
     "The system will generate an automated Jyotish-based compatibility report."
 )
 
-st.warning(
-    "This is an automated report based on predefined rules. "
-    "It does not replace personal judgement, family discussion, counselling, or detailed consultation."
-)
 
 place_options = sorted(PLACES.keys())
 
