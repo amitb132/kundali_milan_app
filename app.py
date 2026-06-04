@@ -607,10 +607,10 @@ if submitted:
                         {
                             "Matched Rashi": match["rashi_name"],
                             "Groom Placement": (
-                                f"{match['Groom_planet']} {match['Groom_varga']}"
+                                f"{match['person1_planet']} {match['person1_varga']}"
                             ),
                             "Bride Placement": (
-                                f"{match['Bride_planet']} {match['Bride_varga']}"
+                                f"{match['person2_planet']} {match['person2_varga']}"
                             ),
                         }
                     )
