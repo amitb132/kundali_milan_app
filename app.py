@@ -159,6 +159,10 @@ PLACES = {
         "lat": 28.383000,
         "lon": 75.967000,
     },
+"Jhunjhunu, Rajasthan": {
+    "lat": 28.128876,
+    "lon": 75.399506,
+},
     "Hisar, Haryana": {
         "lat": 29.151861,
         "lon": 75.721123,
